@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <title>Axiom Pro 49 Tests</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
+
+    <script type="module">
+      var test = 0;
+      var ax49in, ax49out;
+      WebMidi
+        .enable({sysex: true})
+        .then(onEnabled)
+        .catch(err => alert(err));
+
+        function onEnabled() {
+          if (WebMidi.inputs.length < 1) {
+            document.body.innerHTML+= "No input device detected.";
+            return;
+          }
+          if (WebMidi.outputs.length < 1) {
+              document.body.innerHTML+= "No output device detected.";
+              return;
+          }
+        
+          ax49in = WebMidi.getInputByName('HyperControl In');
+          if (ax49in.state == 'connected') {
+              document.body.innerHTML+= "HyperControl input connected.<br>";
+          }
+          else {
+              document.body.innerHTML+= "HyperControl input not connected.";
+              return;
+          }
+          ax49out = WebMidi.getOutputByName('HyperControl Out');
+          if (ax49out.state == 'connected') {
+              document.body.innerHTML+= "HyperControl output connected.<br>";
+          }
+          else {
+              document.body.innerHTML+= "HyperControl output not connected.";
+              return;
+          }
+
+          const listener = ax49in.addListener("midimessage", e => {
+            displayMessage(e.message);
+          });
+          runTest1();
+        }
+      
+      function runTest1()
+      {
+        //send identity request 
+        ax49out.sendSysex([0x7E, 0x7F, 0x06, 0x01]);
+      }
+
+      function displayByte(byte)
+      {
+        document.body.innerHTML+=byte.toString(16);
+        document.body.innerHTML+=' ';
+      }
+      function byteString(byte, base, padlength)
+      {
+        if (!padlength) padlength = 7;
+        var val = byte.toString(base);
+        val = val.padStart(padlength, '0');
+        val+=' ';
+        return val;
+      }
+      
+      function displayMessage(message) {
+        // display message type
+        document.body.innerHTML+= `${message.type} `;
+        // display message data
+        message.data.forEach(displayByte);
+        
+        document.body.innerHTML+='<br>';
+
+      }
+    </script>
+
+  </head>
+
+  <body>
+    <h1>Axiom Pro 49 Test 1</h1>
+  </body>
+
+</html>
