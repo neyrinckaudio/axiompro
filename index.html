@@ -10,8 +10,11 @@
     <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
 
     <script type="module">
-      var test = 0;
       var ax49in, ax49out;
+      
+      var waiting_for_first_response = false;
+      var SYSEX_START = [0, 1, 5, 32, 127];
+
       WebMidi
         .enable({sysex: true})
         .then(onEnabled)
@@ -46,10 +49,75 @@
 
           const listener = ax49in.addListener("midimessage", e => {
             displayMessage(e.message);
+            handleTest2(e.message);
           });
-          runTest1();
+          //runTest1();
+          runTest2();
         }
       
+      function runTest2()
+      {
+        refresh_state();
+      }
+
+      function handleTest2(message)
+      {
+        handle_sysex(message);
+      }
+
+      function refresh_state()
+      {
+        // self._waiting_for_first_response = True
+        // self.schedule_message(10, self._send_midi, SYSEX_START + (32, 46, 247))
+        waiting_for_first_response = true;
+        ax49out.sendSysex(SYSEX_START.concat([32, 46]));
+      }
+
+      function handle_sysex(message)
+      {
+        // this is a port of the handle_sysex function in AxiomPro.py
+        /* if midi_bytes[0:-2] == SYSEX_START + (32,):
+            msg_id_byte = midi_bytes[-2]
+            is_setup_response = msg_id_byte in (46, 38)
+            has_sliders = msg_id_byte == 46
+            if is_setup_response:
+                if self._waiting_for_first_response:
+                    self._waiting_for_first_response = False
+                    self._display_on_button.send_value(0)
+                    for component in self.components:
+                        component.set_enabled(True)
+
+                    self._display_on_button.send_value(127)
+                    self._send_midi(SYSEX_START + (16, 247))
+                    self._send_midi(SYSEX_START + (17, 3, 0, 1, 65, 98, 108, 101, 116, 111, 110, 32, 76, 105, 118, 101, 32, 67, 111, 110, 116, 114, 111, 108, 32, 0, 1, 4, 83, 117, 114, 102, 97, 99, 101, 32, 118, 49, 46, 48, 46, 48, 46, 247))
+                self._mixer_encoder_modes.set_show_volume_page(not has_sliders)
+                for display in self._displays:
+                    display.set_block_messages(False)
+
+                self.schedule_message(25, self._refresh_displays)
+            elif msg_id_byte == 43:
+                self._send_midi(SYSEX_START + (16, 247))
+                for display in self._displays:
+                    if display is self._track_display:
+                        display.update()
+                    else:
+                        display.set_block_messages(True)
+          */
+        var midi_bytes = message.data;
+        if (message.type=='sysex' && arrayEquals(midi_bytes.slice(1,-2), SYSEX_START.concat([32])))
+        {
+          var msg_id_byte = midi_bytes[midi_bytes.length - 2];
+          var is_setup_response = (msg_id_byte==46) || (msg_id_byte==38);
+          var has_sliders = msg_id_byte == 46;
+          if (is_setup_response)
+          {
+            waiting_for_first_response = false;
+            ax49out.sendSysex(SYSEX_START.concat([16]));
+            ax49out.sendSysex(SYSEX_START.concat([17, 3, 0, 1, 65, 98, 108, 101, 116, 111, 110, 32, 76, 105, 118, 101, 32, 67, 111, 110, 116, 114, 111, 108, 32, 0, 1, 4, 83, 117, 114, 102, 97, 99, 101, 32, 118, 49, 46, 48, 46, 48, 46]));
+          }
+        }
+      }
+
       function runTest1()
       {
         //send identity request 
@@ -58,7 +126,7 @@
 
       function displayByte(byte)
       {
-        document.body.innerHTML+=byte.toString(16);
+        document.body.innerHTML+=byte.toString(10);
         document.body.innerHTML+=' ';
       }
       function byteString(byte, base, padlength)
@@ -78,6 +146,13 @@
         
         document.body.innerHTML+='<br>';
 
+      }
+
+      function arrayEquals(a, b) {
+        return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index]);
       }
     </script>
 
