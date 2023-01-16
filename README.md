@@ -46,10 +46,15 @@ Test 2 emulates the "refresh" code in AxiomPro.py. Note that the refresh_state()
 240 0 1 5 32 127 32 46 247
 ```
 
-2. After sending the the sysex message with data of [17, 3, 0, 1, 65, 98, 108, 101, 116, 111, 110, 32, 76, 105, 118, 101, 32, 67, 111, 110, 116, 114, 111, 108, 32, 0, 1, 4, 83, 117, 114, 102, 97, 99, 101, 32, 118, 49, 46, 48, 46, 48, 46], the screen on the device displays:
+2. After sending the the sysex message with data of [17, 3, 0, 1, 65, 98, 108, 101, 116, 111, 110, 32, 76, 105, 118, 101, 32, 67, 111, 110, 116, 114, 111, 108, 32, 0, 1, 4, 83, 117, 114, 102, 97, 99, 101, 32, 118, 49, 46, 48, 46, 48, 46], the screen on the device displays on line 2:
 ```
-Ableton Live Control Surface v 1.0.0.
+Ableton Live Control
 ```
+and on line 3:
+```
+Surface v 1.0.0.
+```
+and both are centered.
 
 Note that the ascii values of these data bytes:
 [65, 98, 108, 101, 116, 111, 110, 32, 76, 105, 118, 101, 32, 67, 111, 110, 116, 114, 111, 108]
@@ -65,6 +70,8 @@ are the ASCII equivalent of:
 2. Lines of text can be sent by a sysex message.
 
 3. Before sending the text display message a simple message with data [16] is sent to it and I don't know what that is for.
+
+
 
 
 
