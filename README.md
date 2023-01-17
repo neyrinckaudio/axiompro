@@ -175,4 +175,20 @@ page_displays[3] - 17,4,3,0
 17,2,0,0 is for the second from bottom row starting at the left.
 17,4,B,0 is for the bottom row and B addresses the button alignment
 
+## HyperControl - Test 5
+The AxiomPro.py code specifies sysex data for a "self._track_display.set_clear_all_message." The data is [16] which is the same as the mysterious message referenced in earlier tests. This test tries that message.
+
+#### Observations
+Procedure 1
+1. Connect - "Ableton Live Control Surface v 1.0.0." is displayed.
+2. Run Test 5 - The above text is cleared.
+
+Procedure 2
+1. Connect - "Ableton Live Control Surface v 1.0.0." is displayed.
+2. Run Test 4 - "Trk Disp   Dev Disp", "Param Disp", and "Pg1  Pg2  Pg3  Pg4  " are displyed.
+3. Run Test 5 - All text is cleared.
+
+#### Conclusions
+The sysex message of [16] clears the entire display.
+
 

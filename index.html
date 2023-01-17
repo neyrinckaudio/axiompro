@@ -14,6 +14,7 @@
       
       var waiting_for_first_response = false;
       var track_display = [];
+      var track_display_set_clear_all_message = [];
       var device_display = [];
       var parameter_display = [];
       var page_displays = [];
@@ -85,6 +86,7 @@
             self._track_display.set_clear_all_message(SYSEX_START + (16, 247))
             self._track_display.set_message_parts(SYSEX_START + (17, 1, 0, 0), (247,))
         */
+        track_display_set_clear_all_message = SYSEX_START.concat([16]);
         track_display = SYSEX_START.concat([17,1,0,0]);
         /*
         device_display = PhysicalDisplayElement(8, 1)
@@ -223,6 +225,12 @@
         ax49out.sendSysex(msg);
       }
 
+      function doTrackSetClear(){
+        ax49out.sendSysex(track_display_set_clear_all_message);
+      }
+
+      track_display_set_clear_all_message
+
       function doDeviceDisplay(text){
         var msg = device_display.slice();
         for(let i = 0; i < text.length; i++){
@@ -257,6 +265,10 @@
         for (let i=0; i<4; i++)
           doPageDisplay(i, "Pg"+(i+1));
       }
+
+      function doTest5(){
+        doTrackSetClear();
+      }
       
     </script>
 
@@ -267,6 +279,7 @@
     <button type='button' onclick='refresh_state()'>Connect</button>
     <button type='button' onclick='disconnect()'>Disconnect</button>
     <button type='button' onclick='doTest4()'>Run Test 4</button>
+    <button type='button' onclick='doTest5()'>Run Test 5</button>
   </body>
 
 </html>
