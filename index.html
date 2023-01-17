@@ -9,7 +9,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/webmidi@next/dist/iife/webmidi.iife.js"></script>
 
-    <script type="module">
+    <script>
       var ax49in, ax49out;
       
       var waiting_for_first_response = false;
@@ -32,18 +32,18 @@
         
           ax49in = WebMidi.getInputByName('HyperControl In');
           if (ax49in.state == 'connected') {
-              document.body.innerHTML+= "HyperControl input connected.<br>";
+              document.body.innerHTML+= "<p>HyperControl input connected.</p>";
           }
           else {
-              document.body.innerHTML+= "HyperControl input not connected.";
+              document.body.innerHTML+= "<p>HyperControl input not connected.</p>";
               return;
           }
           ax49out = WebMidi.getOutputByName('HyperControl Out');
           if (ax49out.state == 'connected') {
-              document.body.innerHTML+= "HyperControl output connected.<br>";
+              document.body.innerHTML+= "<p>HyperControl output connected.</p>";
           }
           else {
-              document.body.innerHTML+= "HyperControl output not connected.";
+              document.body.innerHTML+= "<p>HyperControl output not connected.</p>";
               return;
           }
 
@@ -53,7 +53,7 @@
           });
           //runTest1();
           //runTest2();
-          runTest3();
+          //runTest3();
         }
       
       function runTest2()
@@ -158,11 +158,12 @@
       
       function displayMessage(message) {
         // display message type
+        document.body.innerHTML+="</p>";
         document.body.innerHTML+= `${message.type} `;
         // display message data
         message.data.forEach(displayByte);
         
-        document.body.innerHTML+='<br>';
+        document.body.innerHTML+='</p>';
 
       }
 
@@ -178,6 +179,8 @@
 
   <body>
     <h1>Axiom Pro 49 Test 1</h1>
+    <button type='button' onclick='refresh_state()'>Connect</button>
+    <button type='button' onclick='disconnect()'>Disconnect</button>
   </body>
 
 </html>
