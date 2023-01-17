@@ -118,7 +118,7 @@ The device screen very briefly displays "Logic Pro closed"
 
 #### Conclusions
 
-Logic uses a very similar initialization protocol to that coded for Ableton. It also shows a disconnect protocol. Curiously the initialize message data is [32, 42] instead of [32, 46].
+Logic uses a very simmilar initialization protocol to that coded for Ableton. It also shows a disconnect protocol. Curiously the initialize message data is [32, 42] instead of [32, 46].
 
 ## HyperControl - Test 3
 Test 3 emulates the "disconnect" code in AxiomPro.py. Notice how it sends a sysex with data [32, 0] just like Logic does. And it sends the mysteriosu sysex with data [16]. And it sends a sysex with ASCII values of "Ableton Live Control" and "Surface Closed." Run this test after running Test 2 to emulate a connect/disconect cycle in Ableton.
@@ -133,10 +133,46 @@ Test 3 emulates the "disconnect" code in AxiomPro.py. Notice how it sends a syse
 
 3. "Surface Closed." is briefly displayed on the device.
 
-4. After briefly displaying "Ableton Live Contr" and "Surface Closed" the device display changes to showing the Midi controller info it normally shows when first powered up.
+4. After briefly displaying "Ableton Live Contr" and "Surface Closed" the device display changes to showing the Midi controller info it normally shows when first poered up.
 
 #### Conclusions
 It looks like sysex with data [32, 0] is a disconnect message and the device acknowledges with the same message to indicate it is disconnected.
 
 The format of the text "Ableton Live Control" is cut off on the right so it seems the formatting of how it is displayed must be done carefully. perhaps Logic is not formatting the text correctly.
+
+
+## HyperControl - Test 4
+This test sends various display sysex messages as defined in AxiomPro.py to see what the Axiom device display shows. The init() function was added and parts of the Python init function were ported:
+track_display
+device_display
+parameter_display
+page_displays
+
+I added a button labeled "Run Test 4" that invokes sending messages to the displays.
+
+#### Observations
+I see "Trk Disp   Dev Disp" across the top in a large font. I see "Param Disp" in the second row from the bottom. I see "Pg1  Pg2  Pg3  Pg4  " in the bottom row.
+
+track_display - top row left, large variable-width font
+device_display - top row right, large variable-width font
+parameter_display - second from bottom row, fixed width font
+page_displays[0] - bottom row, column 0, fixed width font, aligned with display button 1
+page_displays[1] - bottom row, column 4, fixed width font, aligned with display button 2
+page_displays[2] - bottom row, column 9, fixed width font, aligned with display button 3
+page_displays[3] - bottom row, column 14, fixed width font, aligned with display button 4
+
+The sysex "commands" for these are:
+track_display - 17,1,0,0
+device_display - 17,1,0,10
+parameter_display - 17,2,0,0
+page_displays[0] - 17,4,0,0 
+page_displays[1] - 17,4,1,0 
+page_displays[2] - 17,4,2,0 
+page_displays[3] - 17,4,3,0 
+
+#### Conclusions
+17,1,0,C is for the top row and C addresses the starting point.
+17,2,0,0 is for the second from bottom row starting at the left.
+17,4,B,0 is for the bottom row and B addresses the button alignment
+
 

@@ -13,6 +13,10 @@
       var ax49in, ax49out;
       
       var waiting_for_first_response = false;
+      var track_display = [];
+      var device_display = [];
+      var parameter_display = [];
+      var page_displays = [];
       var SYSEX_START = [0, 1, 5, 32, 127];
 
       WebMidi
@@ -21,6 +25,7 @@
         .catch(err => alert(err));
 
         function onEnabled() {
+          init();
           if (WebMidi.inputs.length < 1) {
             document.body.innerHTML+= "No input device detected.";
             return;
@@ -69,6 +74,41 @@
       function handleTest2(message)
       {
         handle_sysex(message);
+      }
+
+      function init(){
+        //self._waiting_for_first_response = True
+        waiting_for_first_response = true;
+
+        /*
+        self._track_display = PhysicalDisplayElement(8, 1)
+            self._track_display.set_clear_all_message(SYSEX_START + (16, 247))
+            self._track_display.set_message_parts(SYSEX_START + (17, 1, 0, 0), (247,))
+        */
+        track_display = SYSEX_START.concat([17,1,0,0]);
+        /*
+        device_display = PhysicalDisplayElement(8, 1)
+        device_display.set_message_parts(SYSEX_START + (17, 1, 0, 10), (247,))
+        */
+        device_display = SYSEX_START.concat([17,1,0,10]);
+        /*
+        parameter_display = PhysicalDisplayElement(16, 1)
+        parameter_display.set_message_parts(SYSEX_START + (17, 2, 0, 0), (247,))
+        */
+        parameter_display = SYSEX_START.concat([17,2,0,0]);
+        /*
+        page_displays = []
+            for index in range(4):
+                page_displays.append(PhysicalDisplayElement(5, 1))
+                page_displays[-1].set_message_parts(SYSEX_START + (17,
+                 4,
+                 index,
+                 0), (247,))
+        */
+        page_displays = [];
+        for (let index=0; index<4; index++){
+          page_displays.push(SYSEX_START.concat([17,4,index,0]));
+        }
       }
 
       function refresh_state()
@@ -173,6 +213,51 @@
         a.length === b.length &&
         a.every((val, index) => val === b[index]);
       }
+      
+      function doTrackDisplay(text){
+        var msg = track_display.slice();
+        for(let i = 0; i < text.length; i++){
+          let code = text.charCodeAt(i);
+            msg.push(code);
+        }
+        ax49out.sendSysex(msg);
+      }
+
+      function doDeviceDisplay(text){
+        var msg = device_display.slice();
+        for(let i = 0; i < text.length; i++){
+          let code = text.charCodeAt(i);
+            msg.push(code);
+        }
+        ax49out.sendSysex(msg);
+      }
+
+      function doParameterDisplay(text){
+        var msg = parameter_display.slice();
+        for(let i = 0; i < text.length; i++){
+          let code = text.charCodeAt(i);
+            msg.push(code);
+        }
+        ax49out.sendSysex(msg);
+      }
+
+      function doPageDisplay(index, text){
+        var msg = page_displays[index].slice();
+        for(let i = 0; i < text.length; i++){
+          let code = text.charCodeAt(i);
+            msg.push(code);
+        }
+        ax49out.sendSysex(msg);
+      }
+      
+      function doTest4(){
+        doTrackDisplay("Trk Disp");
+        doDeviceDisplay("Dev Disp");
+        doParameterDisplay("Param Disp");
+        for (let i=0; i<4; i++)
+          doPageDisplay(i, "Pg"+(i+1));
+      }
+      
     </script>
 
   </head>
@@ -181,6 +266,7 @@
     <h1>Axiom Pro 49 Test 1</h1>
     <button type='button' onclick='refresh_state()'>Connect</button>
     <button type='button' onclick='disconnect()'>Disconnect</button>
+    <button type='button' onclick='doTest4()'>Run Test 4</button>
   </body>
 
 </html>
