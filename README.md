@@ -71,6 +71,54 @@ are the ASCII equivalent of:
 
 3. Before sending the text display message a simple message with data [16] is sent to it and I don't know what that is for.
 
+## HyperControl - Test 2.1
+
+This test doesn't run anything here. Instead it observes MIDI messages when Logic Pro launches with the Axiom Pro 61 connected to it. And when Logic Pro quits.
+
+Logic Pro 10.7.4
+Macbook Pro Retina, Intel processor
+Mac OS Monterey 12.2.1
+Midi Monitor v 1.4.1
+
+#### Observations
+When Logic Pro is launched, Midi Monitor 2 observes these messages:
+```
+12:30:06.397	To HyperControl Out  	SysEx		M-Audio (Midiman) $9 bytes	F0 00 01 05 20 7F 20 2A F7
+12:30:06.397	To HyperControl Out  	SysEx		M-Audio (Midiman) $8 bytes	F0 00 01 05 20 7F 10 F7
+12:30:06.403	From HyperControl In   	SysEx		M-Audio (Midiman) $9 bytes	F0 00 01 05 20 7F 20 2A F7
+12:30:07.401	To HyperControl Out  	SysEx		M-Audio (Midiman) $1F bytes	F0 00 01 05 20 7F 11 03 01 01 57 65 6C 63 6F 6D 65 20 74 6F 20 4C 6F 67 69 63 20 50 17 12 02 F7
+```
+12:30:06.397 Note that Logic first sends a message with data [32, 42]. 
+12:30:06.397 Logic immediately sends a message with data [16].
+12:30:06.403 The device replies with data [32, 42].
+12:30:07.401 Logic sends a message that has ASCII data, "Welcome To Logic Pro"
+
+This is very similar to the Ableton code. It differs a bit:
+
+1. Instead of send/reply [32 46] the send/reply is [32 42]
+2. The mystery [16] message is sent before receiving the [32 42] reply.
+
+And the device shows the text "Welcome To Logic Pro" on line 2, centered.
+
+When Logic Pro is quit, Midi Monitor 2 observes these messages:
+```
+14:05:23.999	To HyperControl Out  	SysEx		M-Audio (Midiman) 19 bytes	F0 00 01 05 20 7F 11 01 00 00 20 20 20 20 20 20 20 20 F7
+14:05:23.999	To HyperControl Out  	SysEx		M-Audio (Midiman) 19 bytes	F0 00 01 05 20 7F 11 01 00 0A 20 20 20 20 20 20 20 20 F7
+14:05:23.999	To HyperControl Out  	SysEx		M-Audio (Midiman) 8 bytes	F0 00 01 05 20 7F 10 F7
+14:05:24.000	To HyperControl Out  	SysEx		M-Audio (Midiman) 27 bytes	F0 00 01 05 20 7F 11 03 01 03 4C 6F 67 69 63 20 50 72 6F 20 63 6C 6F 73 65 64 F7
+14:05:24.020	From HyperControl In   	SysEx		M-Audio (Midiman) 9 bytes	F0 00 01 05 20 7F 20 00 F7
+```
+14:05:23.999 Logic sends a sysex message with ASCII data of "        "
+14:05:23.999 Logic sends a sysex message with ASCII data of "        "
+14:05:24.000 Logic sends a sysex message with data [16]
+14:05:24.000 Logic sends a sysex message with ASCII data of "Logic Pro closed"
+14:05:24.020 Logic sends a sysex message with data [32, 0]
+
+The device screen very briefly displays "Logic Pro closed"
+
+#### Conclusions
+
+Logic uses a very simmilar initialization protocol to that coded for Ableton. It also shows a disconnect protocol. Curiously the initialize message data is [32, 42] instead of [32, 46].
 
 
 
