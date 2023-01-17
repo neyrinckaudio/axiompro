@@ -120,7 +120,23 @@ The device screen very briefly displays "Logic Pro closed"
 
 Logic uses a very simmilar initialization protocol to that coded for Ableton. It also shows a disconnect protocol. Curiously the initialize message data is [32, 42] instead of [32, 46].
 
+## HyperControl - Test 3
+Test 3 emulates the "disconnect" code in AxiomPro.py. Notice how it sends a sysex with data [32, 0] just like Logic does. And it sends the mysteriosu sysex with data [16]. And it sends a sysex with ASCII values of "Ableton Live Control" and "Surface Closed." Run this test after running Test 2 to emulate a connect/disconect cycle in Ableton.
 
+#### Observations
+1. This sysex message is received from the device:
+```
+240 0 1 5 32 127 32 0 247
+```
 
+2. "Ableton Live Contr" is briefly displayed on the device. The "ol" portion sent seems to be cut off on the right of the display.
 
+3. "Surface Closed." is briefly displayed on the device.
+
+4. After briefly displaying "Ableton Live Contr" and "Surface Closed" the device display changes to showing the Midi controller info it normally shows when first poered up.
+
+#### Conclusions
+It looks like sysex with data [32, 0] is a disconnect message and the device acknowledges with the same message to indicate it is disconnected.
+
+The format of the text "Ableton Live Control" is cut off on the right so it seems the formatting of how it is displayed must be done carefully. perhaps Logic is not formatting the text correctly.
 
