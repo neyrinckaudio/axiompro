@@ -18,6 +18,7 @@
       var device_display = [];
       var parameter_display = [];
       var page_displays = [];
+      var encoder_display = {};
       var SYSEX_START = [0, 1, 5, 32, 127];
 
       WebMidi
@@ -111,6 +112,32 @@
         for (let index=0; index<4; index++){
           page_displays.push(SYSEX_START.concat([17,4,index,0]));
         }
+        /*
+        encoder_display = PhysicalDisplayElement(80, 8)
+            encoder_display.set_message_parts(SYSEX_START + (17, 3), (247,))
+            for index in range(8):
+                pos_id = tuple()
+                if index != 0:
+                    pos_id += (0,)
+                if index > 3:
+                    pos_id += (index % 4, 13)
+                else:
+                    pos_id += (index % 4, 0)
+                encoder_display.segment(index).set_position_identifier(pos_id)
+        */
+        encoder_display = {};
+        encoder_display.message_parts = SYSEX_START.concat([17,3]);
+        encoder_display.position_identifier = [];
+        for (let index=0; index<8; index++){
+          encoder_display.position_identifier.push([]);
+          if (index != 0)
+            encoder_display.position_identifier[index].push(0);
+          if (index > 3)
+            encoder_display.position_identifier[index] = encoder_display.position_identifier[index].concat([index%4, 13]);
+          else
+            encoder_display.position_identifier[index] = encoder_display.position_identifier[index].concat([index%4, 0]);
+        }
+
       }
 
       function refresh_state()
@@ -258,6 +285,19 @@
         ax49out.sendSysex(msg);
       }
       
+      function doEncoderDisplay(texts){
+        var msg = encoder_display.message_parts.slice();
+        for (let i=0;i<8;i++)
+        {
+          var text = texts[i];
+          msg = msg.concat(encoder_display.position_identifier[i]);
+          for(let j = 0; j < text.length; j++){
+            let code = text.charCodeAt(j);
+            msg.push(code);
+          }
+        }
+        ax49out.sendSysex(msg);
+      }
       function doTest4(){
         doTrackDisplay("Trk Disp");
         doDeviceDisplay("Dev Disp");
@@ -270,6 +310,9 @@
         doTrackSetClear();
       }
       
+      function doTest6(){
+        doEncoderDisplay(['Enc 1','Enc 2','Enc 3','Enc 4','Enc 5','Enc 6','Enc 7','Enc 8']);
+      }
     </script>
 
   </head>
@@ -280,6 +323,7 @@
     <button type='button' onclick='disconnect()'>Disconnect</button>
     <button type='button' onclick='doTest4()'>Run Test 4</button>
     <button type='button' onclick='doTest5()'>Run Test 5</button>
+    <button type='button' onclick="doTest6()">Run Test 6</button>
   </body>
 
 </html>

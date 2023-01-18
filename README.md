@@ -191,4 +191,39 @@ Procedure 2
 #### Conclusions
 The sysex message of [16] clears the entire display.
 
+## HyperControl - Test 6
+The AxiomPro.py code specifies sysex data for a "encoder_display." This test tries that message. It starts with [17,3] which is what the sysex messages are in "refresh_state" and "disconnect". The area of the text displayed for "refresh_state" and "disconnect" shows graphics of encoders when disconnected, so it seems that is the "encoder_display" area.
+
+AxiomPro.py sets up eight "segments", each with a diffring set of data that preceds the ASCII values.
+
+#### Observations
+The eight different segments are displayed as two across each of four rows that encompass the encoder_display area. Segments 1-4 are at the start of the four rows. Segments 5-8 are at the middle of the four rows. 
+
+The data preceding each text segment is:
+segment 0 - [0, 0]
+segment 1 - [0, 1, 0]
+segment 2 - [0, 2, 0]
+segment 3 - [0, 3, 0]
+segment 4 - [0, 0, 13]
+segment 5 - [0, 1, 13]
+segment 6 - [0, 2, 13]
+segment 7 - [0, 3, 13]
+
+For the setup/initialize text displayed, it has two portions with data:
+"Ableton Live Control" - [0, 1]
+"Surface v1.0.0." - [0, 1, 4]
+
+For the disconnect text displayed, it has two portions with data:
+"Ableton Live Control" - [0, 4]
+"Surface Closed." - [0, 1, 4]
+
+#### Conclusions
+17,3 addresses the encoder display area.
+
+For segment 0
+[R, C] - R addresses rows 1-4. C addresses the column
+
+For segments 1-7
+[0, R, C] - R addresses rows 1-4. C addresses the column
+
 
