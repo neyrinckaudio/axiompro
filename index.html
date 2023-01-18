@@ -126,6 +126,7 @@
                 encoder_display.segment(index).set_position_identifier(pos_id)
         */
         encoder_display = {};
+        encoder_display = {};
         encoder_display.message_parts = SYSEX_START.concat([17,3]);
         encoder_display.position_identifier = [];
         for (let index=0; index<8; index++){
@@ -298,6 +299,24 @@
         }
         ax49out.sendSysex(msg);
       }
+      function doEncoderDisplays2(pcs){
+        var msg = encoder_display.message_parts.slice();
+        for (let i=0;i<pcs.length;i++)
+        {
+          var piece = pcs[i];
+          var text = piece.text;
+          msg.push(piece.row);
+          msg.push(piece.col);
+          for(let j = 0; j < text.length; j++){
+            let code = text.charCodeAt(j);
+            msg.push(code);
+          }
+          if (i<pcs.length-1)
+            msg.push(0);
+        }
+        ax49out.sendSysex(msg);
+      }
+
       function doTest4(){
         doTrackDisplay("Trk Disp");
         doDeviceDisplay("Dev Disp");
@@ -313,17 +332,37 @@
       function doTest6(){
         doEncoderDisplay(['Enc 1','Enc 2','Enc 3','Enc 4','Enc 5','Enc 6','Enc 7','Enc 8']);
       }
+      function doTest7a(){
+        doEncoderDisplays2([{"row":1,"col":13,"text":"hello"},{"row":0,"col":3,"text":"world"}]);
+      }
+      function doTest7b(){
+        doEncoderDisplays2([{"row":3,"col":3,"text":"row 3, col 3 is here."},{"row":2,"col":2,"text":"row 2, col 2 is here."},{"row":1,"col":1,"text":"row 1 is here."},{"row":0,"col":0,"text":"row 0 is here."}]);
+      }
+      function doTest7c(){
+        doEncoderDisplays2([{"row":0,"col":0,"text":"012345678901234567890"},{"row":1,"col":1,"text":"12345678901234567890"},{"row":2,"col":2,"text":"2345678901234567890"},{"row":3,"col":3,"text":"345678901234567890"}]);
+      }
+      function doTest7d(){
+        doEncoderDisplays2([{"row":3,"col":0,"text":"345678901234567890"},{"row":2,"col":1,"text":"2345678901234567890"},{"row":1,"col":2,"text":"12345678901234567890"},{"row":0,"col":3,"text":"012345678901234567890"}]);
+      }
+      function doTest7e(){
+        doEncoderDisplays2([{"row":0,"col":0,"text":"1"},{"row":1,"col":0,"text":"2"},{"row":2,"col":0,"text":"3"},{"row":3,"col":0,"text":"4"},{"row":0,"col":8,"text":"5"},{"row":1,"col":8,"text":"6"},{"row":2,"col":8,"text":"7"},{"row":3,"col":8,"text":"8"},{"row":0,"col":12,"text":"9"},{"row":1,"col":12,"text":"10"},{"row":2,"col":12,"text":"11"},{"row":3,"col":12,"text":"12"}]);
+      }
     </script>
 
   </head>
 
   <body>
-    <h1>Axiom Pro 49 Test 1</h1>
+    <h1>Axiom Pro 49</h1>
     <button type='button' onclick='refresh_state()'>Connect</button>
     <button type='button' onclick='disconnect()'>Disconnect</button>
     <button type='button' onclick='doTest4()'>Run Test 4</button>
     <button type='button' onclick='doTest5()'>Run Test 5</button>
-    <button type='button' onclick="doTest6()">Run Test 6</button>
+    <button type='button' onclick="doTest6()">Run Test 6</button><br>
+    <button type='button' onclick="doTest7a()">Run Test 7a</button>
+    <button type='button' onclick="doTest7b()">Run Test 7b</button>
+    <button type='button' onclick="doTest7c()">Run Test 7c</button>
+    <button type='button' onclick="doTest7d()">Run Test 7d</button>
+    <button type='button' onclick="doTest7e()">Run Test 7e</button>
   </body>
 
 </html>

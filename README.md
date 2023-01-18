@@ -226,4 +226,33 @@ For segment 0
 For segments 1-7
 [0, R, C] - R addresses rows 1-4. C addresses the column
 
+## HyperControl - Test 7
+I started experimenting with encoder display messages. Ableton organized them as eight segments, two on each line at fixed column positions. However, the refresh and disconnect protocols show that the display can be addressed in other ways using row and column. As I experimented I realized the encoder_display code hard-codes zero values that mark the end of segments. I constructed a new function, encoderDisplays2, that uses row and column info passed into it and terminates segments with a zero. I created five different sub-tests:
+
+7a - Display "Hello" and "World" at separate rows and columns.
+7b - Display text at each row and incrementing columns for each.
+7c - Display "0123456789" at each row and incrementing columns for each, starting at the top row.
+7d - Display "0123456789" at each row and incrementing columns for each, starting at the bottom row.
+7e - Display 12 separate strings at various locations.
+
+#### Observations
+Each time a sub-test is run, the entire encoder display refreshes and displays nothing except the text passed in to the message.
+
+Characters are rendered with a fixed-width font that is 6 pixels wide.
+
+For 7b the column locations does not look quite as expected. I expected the column value to match up with the fixed-width font width.
+
+Tests 7c and 7d make it easy to the unexpected column locatiosn to be consistent no matter what order items are displayed.
+
+#### Conclusions
+17,3 addresses the encoder display area.
+
+Any number of text segments can be "printed" in a message.
+
+Each segment is addressed by a row and column and is terminated with a 0 value.
+
+[R, C] - R addresses rows 1-4. C addresses the column
+
+The column value sets the position a multiple of 5 pixels. Thus, text characters on one line do not align with characters on another line unless they use the same column value because the font is six pixels wide. That is probably a bug in the Axiom Pro device firmware. And I doubt there is any way to truly center text unless it is padded left with spaces.
+
 
