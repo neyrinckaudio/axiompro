@@ -255,4 +255,53 @@ Each segment is addressed by a row and column and is terminated with a 0 value.
 
 The column value sets the position a multiple of 5 pixels. Thus, text characters on one line do not align with characters on another line unless they use the same column value because the font is six pixels wide. That is probably a bug in the Axiom Pro device firmware. And I doubt there is any way to truly center text unless it is padded left with spaces.
 
+## HyperControl - Test 8
+In this test we press buttons, move faders, and move encoders and observe messages sent by the device. It is important to Connect before using the controls so that the device will send them.
+
+#### Observations
+Buttons, faders, and encoders all send conntroller messages. The controller number identifies the control.
+
+Button down sends value 0x7f.
+Button up sends value 0.
+Faders send values 0x0 - 0x7f with 0x0 at bottom and 0x7f at top.
+Encoders, when turned to right,  send a small value such as 1, 2, or 3 depending how fast it is turned.
+Encoders, when turned to left,  send a large value such as 0x7f, 0x7e, or 0x7d depending how fast it is turned.
+
+
+#### Conclusions
+Buttons
+Buttons are momentary.
+
+Controller Numbers
+LCD Button 1 - 74
+LCD Button 1 - 75
+LCD Button 1 - 76
+LCD Button 1 - 77
+Peek - 78
+Mode - 109
+Track Left - 110
+Track Right - 111
+Mute - 12
+Solo - 13
+Bank Left - 14
+Bank Right - 15
+S10 - S18 - 49,50,51,52,53,54,55,56,57
+Loop - 113
+Rewind - 114
+Forward - 115
+Stop - 116
+Play - 117
+Record - 118
+
+Faders
+Faders send absolute position with 7 bits precision.
+Controller Numbers
+S1 to S9 - 33,34,35,36,37,38,39,40,41
+
+Encoders
+Encoders use twos-complement for negative (left) values with 7 bits precision. 
+Controller Numbers
+E1 to E8 - 17,18,19,20,21,22,23,24
+
+
 
