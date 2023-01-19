@@ -303,5 +303,42 @@ Encoders use twos-complement for negative (left) values with 7 bits precision.
 Controller Numbers
 E1 to E8 - 17,18,19,20,21,22,23,24
 
+## HyperControl - Test 9
+As the user guides for DAWs explain, you can switch the device between "Transport" and "Normal" mode. This is done by pressing Edit and then using the 0 keypad button.
 
+#### Observations
+When disconnected, the device sends a message each time 0 is pressed:
 
+sysex 240 0 1 5 32 127 32 1 247 (when Transport mode is selected)
+
+sysex 240 0 1 5 32 127 32 0 247 (when Normal mode is selected)
+
+When connected, the device sends a message each time 0 is pressed:
+
+sysex 240 0 1 5 32 127 32 47 247 (when Transport mode is selected)
+
+sysex 240 0 1 5 32 127 32 46 247 (when Normal mode is selected)
+
+#### Conclusions
+The [32, X] message has more possible values.
+
+For Ableton:
+[32, 0] - disconnected, normal mode
+[32, 1] - disconnected, transport mode
+[32, 46] - connected, normal mode
+[32, 47] - connected, transport mode
+
+## HyperControl - Test 10
+Here I test the mode switching while connected to Logic.
+
+#### Observations
+16:36:46.499	From HyperControl In   	SysEx		M-Audio (Midiman) 9 bytes	F0 00 01 05 20 7F 20 2A F7 (normal mode selected)
+16:36:47.794	From HyperControl In   	SysEx		M-Audio (Midiman) 9 bytes	F0 00 01 05 20 7F 20 2B F7 (transport mode selected)
+
+#### Conclusions
+[32, 0] - disconnected, normal mode
+[32, 1] - disconnected, transport mode
+[32, 46] - connected to Ableton, normal mode
+[32, 47] - connected to Ableton, transport mode
+[32, 42] - connected to Logic, normal mode
+[32, 43] - connected to Logic, transport mode
