@@ -62,7 +62,7 @@
       
       function runTest2()
       {
-        refresh_state();
+        refresh_state(46);
       }
 
       function runTest3()
@@ -138,12 +138,12 @@
 
       }
 
-      function refresh_state()
+      function refresh_state(dawMode)
       {
         // self._waiting_for_first_response = True
         // self.schedule_message(10, self._send_midi, SYSEX_START + (32, 46, 247))
         waiting_for_first_response = true;
-        ax49out.sendSysex(SYSEX_START.concat([32, 46]));
+        ax49out.sendSysex(SYSEX_START.concat([32, dawMode]));
       }
 
       function handle_sysex(message)
@@ -187,6 +187,11 @@
             waiting_for_first_response = false;
             ax49out.sendSysex(SYSEX_START.concat([16]));
             ax49out.sendSysex(SYSEX_START.concat([17, 3, 0, 1, 65, 98, 108, 101, 116, 111, 110, 32, 76, 105, 118, 101, 32, 67, 111, 110, 116, 114, 111, 108, 32, 0, 1, 4, 83, 117, 114, 102, 97, 99, 101, 32, 118, 49, 46, 48, 46, 48, 46]));
+          }
+          if (msg_id_byte > 1)
+          {
+            var textMsg = "setup response "+msg_id_byte;
+            doEncoderDisplays2([{"row":3,"col":0,"text":textMsg}]);
           }
         }
       }
@@ -350,8 +355,16 @@
 
   <body>
     <h1>Axiom Pro 49</h1>
-    <button type='button' onclick='refresh_state()'>Connect</button>
-    <button type='button' onclick='disconnect()'>Disconnect</button>
+    <button type='button' onclick='refresh_state(38)'>Connect 38</button>
+    <button type='button' onclick='refresh_state(40)'>Connect 40</button>
+    <button type='button' onclick='refresh_state(42)'>Connect 42</button>
+    <button type='button' onclick='refresh_state(44)'>Connect 44</button>
+    <button type='button' onclick='refresh_state(46)'>Connect 46</button>
+    <button type='button' onclick='refresh_state(48)'>Connect 48</button>
+    <button type='button' onclick='refresh_state(50)'>Connect 50</button>
+    <button type='button' onclick='refresh_state(52)'>Connect 52</button>
+    <button type='button' onclick='refresh_state(54)'>Connect 54</button>
+    <button type='button' onclick='disconnect()'>Disconnect</button><br>
     <button type='button' onclick='doTest4()'>Run Test 4</button>
     <button type='button' onclick='doTest5()'>Run Test 5</button>
     <button type='button' onclick="doTest6()">Run Test 6</button><br>

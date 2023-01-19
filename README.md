@@ -342,3 +342,17 @@ Here I test the mode switching while connected to Logic.
 [32, 47] - connected to Ableton, transport mode
 [32, 42] - connected to Logic, normal mode
 [32, 43] - connected to Logic, transport mode
+
+## HyperControl - Test 11
+This test experiments with connecting by trying several values besides 46 and 42.
+
+#### Observations
+If I connect with 40, 44, or 48, the device responds with an acknowledge, but the device doesn't behave like it is in normal hypercontrol mode in a consistent way. In fact, it is difficult to pin down what is going on. But one thing is for sure, if I press Edit and then Exit, the four display buttons change to non-normal mode behavior. As well, the encoders don't send. As if it is another mode. 
+
+38 and 50 seem to be mostly normal, but the faders and fader buttons don't send values. 
+
+42,46,50 do behave normal.
+
+#### Conclusions
+Normal mode appears to be in multiples of 4. Transport mode is normal + 1. The other two values might be separate modes. Maybe 50 is for a different DAW.
+
