@@ -256,14 +256,14 @@ Each segment is addressed by a row and column and is terminated with a 0 value.
 The column value sets the position a multiple of 5 pixels. Thus, text characters on one line do not align with characters on another line unless they use the same column value because the font is six pixels wide. That is probably a bug in the Axiom Pro device firmware. And I doubt there is any way to truly center text unless it is padded left with spaces.
 
 ## HyperControl - Test 8
-In this test we press buttons, move faders, and move encoders and observe messages sent by the device. It is important to Connect before using the controls so that the device will send them.
+In this test we press buttons, move sliders, and move encoders and observe messages sent by the device. It is important to Connect before using the controls so that the device will send them.
 
 #### Observations
-Buttons, faders, and encoders all send conntroller messages. The controller number identifies the control.
+Buttons, sliders, and encoders all send conntroller messages. The controller number identifies the control.
 
 Button down sends value 0x7f.
 Button up sends value 0.
-Faders send values 0x0 - 0x7f with 0x0 at bottom and 0x7f at top.
+Sliders send values 0x0 - 0x7f with 0x0 at bottom and 0x7f at top.
 Encoders, when turned to right,  send a small value such as 1, 2, or 3 depending how fast it is turned.
 Encoders, when turned to left,  send a large value such as 0x7f, 0x7e, or 0x7d depending how fast it is turned.
 
@@ -273,10 +273,10 @@ Buttons
 Buttons are momentary.
 
 Controller Numbers
-LCD Button 1 - 74
-LCD Button 1 - 75
-LCD Button 1 - 76
-LCD Button 1 - 77
+Soft Key 1 - 74
+Soft Key 2 - 75
+Soft Key 3 - 76
+Soft Key 4 - 77
 Peek - 78
 Mode - 109
 Track Left - 110
@@ -293,8 +293,8 @@ Stop - 116
 Play - 117
 Record - 118
 
-Faders
-Faders send absolute position with 7 bits precision.
+Sliders
+Sliders send absolute position with 7 bits precision.
 Controller Numbers
 S1 to S9 - 33,34,35,36,37,38,39,40,41
 
@@ -349,10 +349,9 @@ This test experiments with connecting by trying several values besides 46 and 42
 #### Observations
 If I connect with 40, 44, or 48, the device responds with an acknowledge, but the device doesn't behave like it is in normal hypercontrol mode in a consistent way. In fact, it is difficult to pin down what is going on. But one thing is for sure, if I press Edit and then Exit, the four display buttons change to non-normal mode behavior. As well, the encoders don't send. As if it is another mode. 
 
-38 and 50 seem to be mostly normal, but the faders and fader buttons don't send values. 
+38 and 50 seem to be mostly normal, but the sliders and slider buttons don't send values. 
 
 42,46,50 do behave normal.
 
 #### Conclusions
 Normal mode appears to be in multiples of 4. Transport mode is normal + 1. The other two values might be separate modes. Maybe 50 is for a different DAW.
-
