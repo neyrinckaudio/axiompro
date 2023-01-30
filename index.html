@@ -20,6 +20,8 @@
       var page_displays = [];
       var encoder_display = {};
       var SYSEX_START = [0, 1, 5, 32, 127];
+      var ctrls = [];
+      for (var i=0; i<127; i++) ctrls.push(0);
 
       WebMidi
         .enable({sysex: true})
@@ -349,6 +351,11 @@
       function doTest7e(){
         doEncoderDisplays2([{"row":0,"col":0,"text":"1"},{"row":1,"col":0,"text":"2"},{"row":2,"col":0,"text":"3"},{"row":3,"col":0,"text":"4"},{"row":0,"col":8,"text":"5"},{"row":1,"col":8,"text":"6"},{"row":2,"col":8,"text":"7"},{"row":3,"col":8,"text":"8"},{"row":0,"col":12,"text":"9"},{"row":1,"col":12,"text":"10"},{"row":2,"col":12,"text":"11"},{"row":3,"col":12,"text":"12"}]);
       }
+      function setControl(channel, controller, value){
+        var options = {};
+        options.channel = channel;
+        ax49out.sendControlChange(controller, value, options);
+      }
     </script>
 
   </head>
@@ -372,7 +379,40 @@
     <button type='button' onclick="doTest7b()">Run Test 7b</button>
     <button type='button' onclick="doTest7c()">Run Test 7c</button>
     <button type='button' onclick="doTest7d()">Run Test 7d</button>
-    <button type='button' onclick="doTest7e()">Run Test 7e</button>
+    <button type='button' onclick="doTest7e()">Run Test 7e</button><br>
+    <label for="enc1">Encoder 1 Feedback</label><input name="enc1" type="range" min="0" max="127" value="50" class="slider" id="myRange1" oninput="setControl(16,17,this.value)"><br>
+    <label for="enc2">Encoder 2 Feedback</label><input name="enc2" type="range" min="0" max="127" value="50" class="slider" id="myRange2" oninput="setControl(16,18,this.value)"><br>
+    <label for="enc3">Encoder 3 Feedback</label><input name="enc3" type="range" min="0" max="127" value="50" class="slider" id="myRange3" oninput="setControl(16,19,this.value)"><br>
+    <label for="enc4">Encoder 4 Feedback</label><input name="enc4" type="range" min="0" max="127" value="50" class="slider" id="myRange4" oninput="setControl(16,20,this.value)"><br>
+    <label for="enc5">Encoder 5 Feedback</label><input name="enc5" type="range" min="0" max="127" value="50" class="slider" id="myRange5" oninput="setControl(16,21,this.value)"><br>
+    <label for="enc6">Encoder 6 Feedback</label><input name="enc6" type="range" min="0" max="127" value="50" class="slider" id="myRange6" oninput="setControl(16,22,this.value)"><br>
+    <label for="enc7">Encoder 7 Feedback</label><input name="enc7" type="range" min="0" max="127" value="50" class="slider" id="myRange7" oninput="setControl(16,23,this.value)"><br>
+    <label for="enc8">Encoder 8 Feedback</label><input name="enc8" type="range" min="0" max="127" value="50" class="slider" id="myRange8" oninput="setControl(16,24,this.value)"><br>
+    <label for="fad1">Slider 1 Feedback</label><input name="fad1" type="range" min="0" max="127" value="50" class="slider" id="myRange1" oninput="setControl(16,33,this.value)"><br>
+    <label for="fad2">Slider 2 Feedback</label><input name="fad2" type="range" min="0" max="127" value="50" class="slider" id="myRange2" oninput="setControl(16,34,this.value)"><br>
+    <label for="fad3">Slider 3 Feedback</label><input name="fad3" type="range" min="0" max="127" value="50" class="slider" id="myRange3" oninput="setControl(16,35,this.value)"><br>
+    <label for="fad4">Slider 4 Feedback</label><input name="fad4" type="range" min="0" max="127" value="50" class="slider" id="myRange4" oninput="setControl(16,36,this.value)"><br>
+    <label for="fad5">Slider 5 Feedback</label><input name="fad5" type="range" min="0" max="127" value="50" class="slider" id="myRange5" oninput="setControl(16,37,this.value)"><br>
+    <label for="fad6">Slider 6 Feedback</label><input name="fad6" type="range" min="0" max="127" value="50" class="slider" id="myRange6" oninput="setControl(16,38,this.value)"><br>
+    <label for="fad7">Slider 7 Feedback</label><input name="fad7" type="range" min="0" max="127" value="50" class="slider" id="myRange7" oninput="setControl(16,39,this.value)"><br>
+    <label for="fad8">Slider 8 Feedback</label><input name="fad8" type="range" min="0" max="127" value="50" class="slider" id="myRange8" oninput="setControl(16,40,this.value)"><br>
+    <label for="fad9">Slider 9 Feedback</label><input name="fad9" type="range" min="0" max="127" value="50" class="slider" id="myRange8" oninput="setControl(16,41,this.value)"><br>
+    <button type='button' onclick="var idx=49;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S10</button>
+    <button type='button' onclick="var idx=50;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S11</button>
+    <button type='button' onclick="var idx=51;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S12</button>
+    <button type='button' onclick="var idx=52;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S13</button>
+    <button type='button' onclick="var idx=53;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S14</button>
+    <button type='button' onclick="var idx=54;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S15</button>
+    <button type='button' onclick="var idx=55;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S16</button>
+    <button type='button' onclick="var idx=56;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S17</button>
+    <button type='button' onclick="var idx=57;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">S18</button><br>
+    <button type='button' onclick="var idx=113;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">Loop</button>
+    <button type='button' onclick="var idx=114;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">Rewind</button>
+    <button type='button' onclick="var idx=115;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">Forward</button>
+    <button type='button' onclick="var idx=116;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">Stop</button>
+    <button type='button' onclick="var idx=117;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">Play</button>
+    <button type='button' onclick="var idx=118;ctrls[idx]=(!ctrls[idx])?127:0;setControl(16,idx,ctrls[idx])">Record</button>
+    
   </body>
 
 </html>

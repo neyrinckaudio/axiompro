@@ -355,3 +355,12 @@ If I connect with 40, 44, or 48, the device responds with an acknowledge, but th
 
 #### Conclusions
 Normal mode appears to be in multiples of 4. Transport mode is normal + 1. The other two values might be separate modes. Maybe 50 is for a different DAW.
+
+## HyperControl - Test 12
+This experiment sends controller messages back to the device using the same controller numbers that are received as seen in Test 8. Sliders, encoders, and buttons with LEDs are tried.
+
+#### Observations
+The Axiom Pro firmware displays updates to slider and encoders on the LCD screen for values from 0 to 127. The buttons LEDs turn off / on with values 0 and 127 respectively. When a button is pressed / released on the device, it sends on / off messages independent of the LED state. When an encoder is turned, it sends the same 2s complement messages independent of the encoder value sent to the device. After a slider feedback value is set and you then move the slider on teh device, it displays a graphic of the slider showing the last value received and does not start sending new values until you cross that received value.
+
+#### Conclusions
+Like typical control surfaces, the Axiom buttons send momentary on/off messages that are independent of the LED state. And like typical control surfaces with an encoder and a LED ring display, the Axiom encoders send 2s complement relative values that are independent of the received encoder values that are displayed as a virtual ring on the LCD. And like typical control surfaces with moving faders, the sliders send values that match to the last received value.
